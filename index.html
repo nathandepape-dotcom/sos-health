@@ -7,7 +7,68 @@
     <title>SOS Health</title>
   </head>
   <body>
-    <!-- Step 2: your HTML goes here -->
+    <header class="header">
+      <h1>SOS Health</h1>
+      <p class="subtitle">Press the button if you feel in medical danger</p>
+    </header>
+
+    <main class="main">
+      <!-- SOS button -->
+      <button id="sosButton" class="sos-button" type="button">SOS</button>
+
+      <!-- Status messages (location, errors...) -->
+      <p id="status" class="status">Ready</p>
+
+      <!-- Location result -->
+      <section id="locationCard" class="card hidden">
+        <h2>📍 Your location</h2>
+        <p id="address">—</p>
+        <p id="coords" class="small">—</p>
+      </section>
+
+      <!-- Call emergency services -->
+      <a id="callButton" class="call-button" href="tel:101">📞 Call 101 (Magen David Adom)</a>
+
+      <!-- Medical profile -->
+      <section class="card">
+        <h2>🩺 Medical profile</h2>
+        <form id="profileForm" class="profile-form">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" placeholder="Nathan De Pape" />
+
+          <label for="bloodType">Blood type</label>
+          <select id="bloodType">
+            <option value="">Unknown</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+          </select>
+
+          <label for="allergies">Allergies</label>
+          <input type="text" id="allergies" placeholder="Penicillin, peanuts..." />
+
+          <label for="medications">Medications</label>
+          <input type="text" id="medications" placeholder="None" />
+
+          <label for="contactName">Emergency contact name</label>
+          <input type="text" id="contactName" placeholder="Mom" />
+
+          <label for="contactPhone">Emergency contact phone</label>
+          <input type="tel" id="contactPhone" placeholder="050-0000000" />
+
+          <div class="form-buttons">
+            <button type="submit" class="btn">Save</button>
+            <button type="button" id="deleteProfile" class="btn btn-secondary">Delete</button>
+          </div>
+        </form>
+        <p id="profileStatus" class="small"></p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      ⚠️ Learning prototype – not a certified emergency service.
+    </footer>
 
     <script type="module" src="/src/main.ts"></script>
   </body>

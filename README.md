@@ -45,7 +45,10 @@
 
 ## 🚀 Getting started
 
-_Instructions will be added during the hackathon._
+```bash
+npm install     # install the tools (TypeScript, Vite)
+npm run dev     # start the local server, then open the link shown (http://localhost:5173)
+```
 
 ---
 

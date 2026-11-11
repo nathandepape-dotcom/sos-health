@@ -89,12 +89,12 @@ function loadProfile() {
     const savedProfile = localStorage.getItem("medicalProfile");
 
     if (savedProfile === null) {
-        return; // nothing saved yet
+        return;
     }
 
     const profile: MedicalProfile = JSON.parse(savedProfile);
 
-    // fill the form with the saved values
+  
     fullNameInput.value = profile.fullName;
     bloodTypeSelect.value = profile.bloodType;
     allergiesInput.value = profile.allergies;
@@ -107,3 +107,8 @@ loadProfile();
 
 // Step 5 (your logic): delete the profile
 
+deleteProfileButton.addEventListener('click',()=>{
+    localStorage.removeItem("medicalProfile")
+    profileForm.reset()
+    profileStatus.textContent = "Deleting your profile"
+})

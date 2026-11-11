@@ -6,8 +6,29 @@ const sosButton = document.querySelector("#sosButton") as HTMLButtonElement;
 const paragraphe = document.querySelector("#status") as HTMLParagraphElement
 const addressText = document.querySelector("#address") as HTMLParagraphElement;
 const locationCard = document.querySelector("#locationCard") as HTMLElement;
+
+// Medical profile form
+const profileForm = document.querySelector("#profileForm") as HTMLFormElement;
+const fullNameInput = document.querySelector("#fullName") as HTMLInputElement;
+const bloodTypeSelect = document.querySelector("#bloodType") as HTMLSelectElement;
+const allergiesInput = document.querySelector("#allergies") as HTMLInputElement;
+const medicationsInput = document.querySelector("#medications") as HTMLInputElement;
+const contactNameInput = document.querySelector("#contactName") as HTMLInputElement;
+const contactPhoneInput = document.querySelector("#contactPhone") as HTMLInputElement;
+const deleteProfileButton = document.querySelector("#deleteProfile") as HTMLButtonElement;
+const profileStatus = document.querySelector("#profileStatus") as HTMLParagraphElement;
+
 interface AdressResponse {
     display_name:string
+}
+
+interface MedicalProfile {
+    fullName: string;
+    bloodType: string;
+    allergies: string;
+    medications: string;
+    contactName: string;
+    contactPhone: string;
 }
 
 async function getAddress(latitude: number, longitude: number): Promise<string> {
@@ -17,14 +38,7 @@ async function getAddress(latitude: number, longitude: number): Promise<string> 
     return data.display_name
 }
 
-
-
-
-
-
-
-
-
+// ---------- SOS button ----------
 sosButton.addEventListener('click', ()=>{
     paragraphe.textContent  = "Getting your location..."
     navigator.geolocation.getCurrentPosition(async position=>{     
@@ -53,3 +67,48 @@ sosButton.addEventListener('click', ()=>{
 );     
 })
 
+// ---------- Medical profile ----------
+profileForm.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+
+    const profile: MedicalProfile = {
+        fullName: fullNameInput.value,
+        bloodType: bloodTypeSelect.value,
+        allergies: allergiesInput.value,
+        medications: medicationsInput.value,
+        contactName: contactNameInput.value,
+        contactPhone: contactPhoneInput.value,
+    };
+
+    localStorage.setItem("medicalProfile", JSON.stringify(profile));
+    profileStatus.textContent = "Profile saved ✅";
+});
+
+// Load the saved profile when the page opens
+function loadProfile() {
+    const savedProfile = localStorage.getItem("medicalProfile");
+
+    if (savedProfile === null) {
+        return;
+    }
+
+    const profile: MedicalProfile = JSON.parse(savedProfile);
+
+  
+    fullNameInput.value = profile.fullName;
+    bloodTypeSelect.value = profile.bloodType;
+    allergiesInput.value = profile.allergies;
+    medicationsInput.value = profile.medications;
+    contactNameInput.value = profile.contactName;
+    contactPhoneInput.value = profile.contactPhone;
+}
+
+loadProfile();
+
+// Step 5 (your logic): delete the profile
+
+deleteProfileButton.addEventListener('click',()=>{
+    localStorage.removeItem("medicalProfile")
+    profileForm.reset()
+    profileStatus.textContent = "Deleting your profile"
+})

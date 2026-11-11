@@ -68,9 +68,8 @@ sosButton.addEventListener('click', ()=>{
 })
 
 // ---------- Medical profile ----------
-// Save the profile when the form is submitted
 profileForm.addEventListener("submit", (event) => {
-    event.preventDefault(); // stop the page from reloading
+    event.preventDefault(); 
 
     const profile: MedicalProfile = {
         fullName: fullNameInput.value,
@@ -81,10 +80,30 @@ profileForm.addEventListener("submit", (event) => {
         contactPhone: contactPhoneInput.value,
     };
 
-    // LocalStorage only stores text -> convert the object to a JSON string
     localStorage.setItem("medicalProfile", JSON.stringify(profile));
     profileStatus.textContent = "Profile saved ✅";
 });
 
-// Step 4 (your logic): load the saved profile when the page opens
+// Load the saved profile when the page opens
+function loadProfile() {
+    const savedProfile = localStorage.getItem("medicalProfile");
+
+    if (savedProfile === null) {
+        return; // nothing saved yet
+    }
+
+    const profile: MedicalProfile = JSON.parse(savedProfile);
+
+    // fill the form with the saved values
+    fullNameInput.value = profile.fullName;
+    bloodTypeSelect.value = profile.bloodType;
+    allergiesInput.value = profile.allergies;
+    medicationsInput.value = profile.medications;
+    contactNameInput.value = profile.contactName;
+    contactPhoneInput.value = profile.contactPhone;
+}
+
+loadProfile();
+
+// Step 5 (your logic): delete the profile
 

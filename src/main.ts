@@ -18,6 +18,11 @@ const contactPhoneInput = document.querySelector("#contactPhone") as HTMLInputEl
 const deleteProfileButton = document.querySelector("#deleteProfile") as HTMLButtonElement;
 const profileStatus = document.querySelector("#profileStatus") as HTMLParagraphElement;
 
+// Alert buttons (SMS + call contact)
+const alertActions = document.querySelector("#alertActions") as HTMLElement;
+const smsButton = document.querySelector("#smsButton") as HTMLAnchorElement;
+const callContactButton = document.querySelector("#callContactButton") as HTMLAnchorElement;
+
 interface AdressResponse {
     display_name:string
 }

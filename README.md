@@ -4,23 +4,36 @@
 
 **SOS Health** is a mobile-first web app with a big emergency button for people who feel in medical danger.
 
+🌐 **Live demo:** https://nathandepape-dotcom.github.io/sos-health/ (open it on your phone – location needs HTTPS)
+
 ⚠️ *This is a learning prototype built during a hackathon. It is not a certified emergency service. In a real emergency, call your local emergency number directly (Israel: **101**, Magen David Adom).*
 
 ---
 
-## ✨ Planned features
+## ✨ Features
 
-### Core (MVP)
-- [ ] **SOS button** – one big button, easy to press on a phone
-- [ ] **GPS location** – get the user's position (`navigator.geolocation`)
-- [ ] **Address lookup** – turn the coordinates into an address with a public API
-- [ ] **Call emergency services** – one-tap call to 101 (`tel:` link)
-- [ ] **Medical profile** – create / edit / delete: blood type, allergies, medications, emergency contacts (saved in LocalStorage)
+### Done
+- [x] **SOS button** – one big button, easy to press on a phone
+- [x] **GPS location** – `navigator.geolocation` with a 10 s timeout, so the user never waits forever
+- [x] **Address lookup** – coordinates → readable address with the OpenStreetMap **Nominatim API** (`fetch` + `async/await`, `try/catch` fallback)
+- [x] **Medical profile** – save / load / delete: name, blood type, allergies, medications, emergency contact (**LocalStorage** + **JSON**)
+- [x] **SMS alert** – pre-filled SMS to the emergency contact with name, address, Google Maps link and medical info (no need to speak or type)
+- [x] **Call buttons** – one tap to call 101 (Magen David Adom) or the emergency contact
+- [x] **Emergency medical sheet** – full-screen sheet shown when calling, readable by rescuers at a glance
 
-### Extra (if time allows)
-- [ ] **Nearest hospitals** – list the closest hospitals with the OpenStreetMap API
-- [ ] **Alert message** – ready-to-share message with location + medical info for emergency contacts
-- [ ] **Alert history** – list of past alerts (saved in LocalStorage)
+### Next ideas
+- [ ] Long press (2 s) on SOS to avoid accidental alerts
+- [ ] Nearest hospitals (OpenStreetMap Overpass API)
+- [ ] Alert history
+
+---
+
+## 🧭 How it works
+
+1. **Before** an emergency: fill in the medical profile once.
+2. **During** an emergency: press **SOS** → the app finds the location and the address.
+3. One tap to **send the SMS alert** or **call** 101 / the emergency contact.
+4. The **medical sheet** is displayed full screen for rescuers.
 
 ---
 
@@ -48,7 +61,16 @@
 ```bash
 npm install     # install the tools (TypeScript, Vite)
 npm run dev     # start the local server, then open the link shown (http://localhost:5173)
+npm run build   # build the production version in dist/
 ```
+
+---
+
+## 🧩 Limits & future vision
+
+- A web page cannot call or send an SMS **by itself** (browser security): the user always confirms with one tap.
+- Laptops estimate their location from Wi-Fi, so it can be off by ~1 km; phones use real GPS.
+- Future: a real backend + an official partnership with emergency services, to send the location and the medical sheet **directly** to the dispatch center.
 
 ---
 

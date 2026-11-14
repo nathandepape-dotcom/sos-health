@@ -135,3 +135,34 @@ body {
 .hidden { display: none; }
 
 .footer { text-align: center; font-size: 0.8rem; color: var(--muted); padding: 16px; }
+
+/* Emergency medical sheet (full screen, readable by rescuers) */
+.emergency-sheet {
+  position: fixed;
+  inset: 0;
+  background: var(--red);
+  color: #fff;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 24px 16px;
+}
+.emergency-sheet.hidden { display: none; }
+
+.sheet-content { max-width: 480px; margin: 0 auto; }
+.sheet-label { font-weight: 800; letter-spacing: 1px; margin: 0; }
+.sheet-name { font-size: 2rem; margin: 8px 0 20px; }
+
+.sheet-grid { display: flex; flex-direction: column; gap: 12px; }
+.sheet-item {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+}
+.sheet-key { font-size: 0.8rem; text-transform: uppercase; opacity: 0.85; }
+.sheet-value { font-size: 1.2rem; font-weight: 700; word-break: break-word; }
+.sheet-value.big { font-size: 2.5rem; }
+.sheet-value a { color: #fff; }
+
+.sheet-close { margin-top: 20px; width: 100%; background: #fff; color: var(--red); }

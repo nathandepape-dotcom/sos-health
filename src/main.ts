@@ -18,10 +18,24 @@ const contactPhoneInput = document.querySelector("#contactPhone") as HTMLInputEl
 const deleteProfileButton = document.querySelector("#deleteProfile") as HTMLButtonElement;
 const profileStatus = document.querySelector("#profileStatus") as HTMLParagraphElement;
 
-// Alert buttons (SMS + call contact)
+// Alert buttons (SMS + call contact + call 101)
 const alertActions = document.querySelector("#alertActions") as HTMLElement;
 const smsButton = document.querySelector("#smsButton") as HTMLAnchorElement;
 const callContactButton = document.querySelector("#callContactButton") as HTMLAnchorElement;
+const callButton = document.querySelector("#callButton") as HTMLAnchorElement;
+
+// Emergency medical sheet
+const emergencySheet = document.querySelector("#emergencySheet") as HTMLElement;
+const sheetName = document.querySelector("#sheetName") as HTMLElement;
+const sheetBlood = document.querySelector("#sheetBlood") as HTMLElement;
+const sheetAllergies = document.querySelector("#sheetAllergies") as HTMLElement;
+const sheetMedications = document.querySelector("#sheetMedications") as HTMLElement;
+const sheetContact = document.querySelector("#sheetContact") as HTMLElement;
+const sheetLocation = document.querySelector("#sheetLocation") as HTMLElement;
+const closeSheetButton = document.querySelector("#closeSheet") as HTMLButtonElement;
+
+// Last known location, used by the SMS and the emergency sheet
+let lastLocation: { latitude: number; longitude: number; address: string } | null = null;
 
 interface AdressResponse {
     display_name:string
@@ -34,6 +48,75 @@ interface MedicalProfile {
     medications: string;
     contactName: string;
     contactPhone: string;
+}
+
+// Read the saved profile from LocalStorage (null if nothing is saved)
+function getSavedProfile(): MedicalProfile | null {
+    const savedProfile = localStorage.getItem("medicalProfile");
+    if (savedProfile === null) {
+        return null;
+    }
+    return JSON.parse(savedProfile);
+}
+
+// Google Maps link of a position
+function getMapsLink(latitude: number, longitude: number): string {
+    return `https://www.google.com/maps?q=${latitude},${longitude}`;
+}
+
+// Prepare the SMS and the "call my contact" buttons with the profile and the location
+function prepareAlert(latitude: number, longitude: number, address: string): void {
+    const profile = getSavedProfile();
+
+    if (profile === null || profile.contactPhone === "") {
+        alertActions.classList.add("hidden");
+        paragraphe.textContent = "Location found. Save your medical profile with an emergency contact to send an alert.";
+        return;
+    }
+
+    const message =
+        `EMERGENCY - ${profile.fullName || "I"} need(s) help!\n` +
+        `Location: ${address}\n` +
+        `Map: ${getMapsLink(latitude, longitude)}\n` +
+        `Blood type: ${profile.bloodType || "unknown"}\n` +
+        `Allergies: ${profile.allergies || "none"}\n` +
+        `Medications: ${profile.medications || "none"}`;
+
+    // "?&body=" works on both iPhone and Android
+    smsButton.href = `sms:${profile.contactPhone}?&body=${encodeURIComponent(message)}`;
+    callContactButton.href = `tel:${profile.contactPhone}`;
+    callContactButton.textContent = `📱 Call ${profile.contactName || "my emergency contact"}`;
+
+    alertActions.classList.remove("hidden");
+}
+
+// Fill and show the full-screen medical sheet
+function showEmergencySheet(): void {
+    const profile = getSavedProfile();
+
+    sheetName.textContent = profile?.fullName || "Unknown person";
+    sheetBlood.textContent = profile?.bloodType || "Unknown";
+    sheetAllergies.textContent = profile?.allergies || "None reported";
+    sheetMedications.textContent = profile?.medications || "None reported";
+    sheetContact.textContent = profile?.contactPhone
+        ? `${profile.contactName} – ${profile.contactPhone}`
+        : "None";
+
+    if (lastLocation === null) {
+        sheetLocation.textContent = "Unknown – press SOS to get the location";
+    } else {
+        const link = getMapsLink(lastLocation.latitude, lastLocation.longitude);
+        sheetLocation.innerHTML = "";
+        const addressLine = document.createElement("div");
+        addressLine.textContent = lastLocation.address;
+        const mapLink = document.createElement("a");
+        mapLink.href = link;
+        mapLink.target = "_blank";
+        mapLink.textContent = "Open in Google Maps";
+        sheetLocation.append(addressLine, mapLink);
+    }
+
+    emergencySheet.classList.remove("hidden");
 }
 
 async function getAddress(latitude: number, longitude: number): Promise<string> {
@@ -52,13 +135,17 @@ sosButton.addEventListener('click', ()=>{
         const messagePostion = `Location found ${latitude},${longitude}`;
         paragraphe.textContent = messagePostion;
         locationCard.classList.remove("hidden");
+        let address = `${latitude}, ${longitude}`;
         try {
-            const address = await getAddress(latitude, longitude);
+            address = await getAddress(latitude, longitude);
             addressText.textContent = address
 
         } catch(error){
             addressText.textContent = "Address unavailable"
         }
+
+        lastLocation = { latitude, longitude, address };
+        prepareAlert(latitude, longitude, address);
         
 
         
@@ -117,3 +204,18 @@ deleteProfileButton.addEventListener('click',()=>{
     profileForm.reset()
     profileStatus.textContent = "Deleting your profile"
 })
+
+// ---------- Emergency sheet ----------
+// When the user calls emergency services, show the medical sheet.
+// The call still starts (tel: link); the sheet is waiting when they come back to the app.
+callButton.addEventListener("click", () => {
+    showEmergencySheet();
+});
+
+callContactButton.addEventListener("click", () => {
+    showEmergencySheet();
+});
+
+closeSheetButton.addEventListener("click", () => {
+    emergencySheet.classList.add("hidden");
+});

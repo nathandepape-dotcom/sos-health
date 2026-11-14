@@ -27,6 +27,12 @@
       </section>
 
       <!-- Call emergency services -->
+      <!-- Alert buttons: hidden until the location is found -->
+      <section id="alertActions" class="alert-actions hidden">
+        <a id="smsButton" class="sms-button" href="#">💬 Send alert SMS to my contact</a>
+        <a id="callContactButton" class="contact-button" href="#">📱 Call my emergency contact</a>
+      </section>
+
       <a id="callButton" class="call-button" href="tel:101">📞 Call 101 (Magen David Adom)</a>
 
       <!-- Medical profile -->
@@ -65,6 +71,39 @@
         <p id="profileStatus" class="small"></p>
       </section>
     </main>
+
+    <!-- Emergency medical sheet: shown full screen after calling emergency services -->
+    <section id="emergencySheet" class="emergency-sheet hidden" aria-live="assertive">
+      <div class="sheet-content">
+        <p class="sheet-label">🚨 MEDICAL EMERGENCY</p>
+        <h2 id="sheetName" class="sheet-name">Unknown person</h2>
+
+        <div class="sheet-grid">
+          <div class="sheet-item">
+            <span class="sheet-key">Blood type</span>
+            <span id="sheetBlood" class="sheet-value big">—</span>
+          </div>
+          <div class="sheet-item">
+            <span class="sheet-key">Allergies</span>
+            <span id="sheetAllergies" class="sheet-value">—</span>
+          </div>
+          <div class="sheet-item">
+            <span class="sheet-key">Medications</span>
+            <span id="sheetMedications" class="sheet-value">—</span>
+          </div>
+          <div class="sheet-item">
+            <span class="sheet-key">Emergency contact</span>
+            <span id="sheetContact" class="sheet-value">—</span>
+          </div>
+          <div class="sheet-item">
+            <span class="sheet-key">Location</span>
+            <span id="sheetLocation" class="sheet-value">—</span>
+          </div>
+        </div>
+
+        <button id="closeSheet" class="btn sheet-close" type="button">Close</button>
+      </div>
+    </section>
 
     <footer class="footer">
       ⚠️ Learning prototype – not a certified emergency service.

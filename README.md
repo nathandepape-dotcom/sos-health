@@ -6,7 +6,7 @@
 
 🌐 **Live demo:** https://nathandepape-dotcom.github.io/sos-health/ (open it on your phone – location needs HTTPS)
 
-🎥 **Video demo (2 min):** https://drive.google.com/file/d/13M_obl8-1wU9i8R56dcvZIYJEjdE_XfN/view?usp=drive_link
+🎥 **Video demo (2 min):** https://drive.google.com/file/d/13M_obl8-1wU9i8R56dcvZIYJEjdE_XfN/view?usp=sharing
 
 ⚠️ *This is a learning prototype built during a hackathon. It is not a certified emergency service. In a real emergency, call your local emergency number directly (Israel: **101**, Magen David Adom).*
 
